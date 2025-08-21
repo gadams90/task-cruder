@@ -62,4 +62,19 @@ async function createTask (req, res) {
   }
 };
 
-module.exports = { getAllTasks, getTaskById, createTask, updateTaskById }
+/**
+ * Delete specified task by id
+ * @param {*} req express request
+ * @param {*} res express response
+ */
+async function deleteTaskById (req, res) {
+  const { id } = req.params;
+  try {
+    await pool.query('DELETE FROM tasks WHERE id = $1', [id]);
+    res.json('Task deleted successfully');
+  } catch (err) {
+    console.error(err.message);
+  }
+};
+
+module.exports = { getAllTasks, getTaskById, createTask, updateTaskById, deleteTaskById }
