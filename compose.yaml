@@ -1,0 +1,30 @@
+services:
+  api:
+    build:
+      context: .
+    container_name: task-cruder
+    ports:
+      - "3000:3000"   # host:container
+    environment:
+      - DB_HOST=db
+      - DB_USER=task-cruder
+      - DB_PASSWORD=localdevpassword
+      - DB_NAME=postgres
+      - DB_PORT=5432
+    depends_on:
+      - db
+  db:
+    image: postgres:17
+    container_name: task-cruder-db
+    restart: always
+    environment:
+      POSTGRES_USER: task-cruder
+      POSTGRES_PASSWORD: localdevpassword
+      POSTGRES_DB: postgres
+    ports:
+      - "5433:5432"   # optional, only needed if you want to connect from host
+    volumes:
+      - postgres_data:/var/lib/postgresql/data
+      - ./db/init-db.sql:/docker-entrypoint-initdb.d/init-db.sql
+volumes:
+  postgres_data:
