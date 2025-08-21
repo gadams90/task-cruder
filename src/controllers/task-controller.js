@@ -16,4 +16,19 @@ async function getAllTasks (req, res) {
   }
 };
 
-module.exports = { getAllTasks }
+/**
+ * Get specified task by id
+ * @param {*} req express request
+ * @param {*} res express response
+ */
+async function getTaskById (req, res) {
+  const { id } = req.params;
+  try {
+    const task = await pool.query('SELECT * FROM tasks WHERE id = $1', [id]);
+    res.json(task.rows[0]);
+  } catch (err) {
+    console.error(err.message);
+  }
+};
+
+module.exports = { getAllTasks, getTaskById }
