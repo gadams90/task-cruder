@@ -31,4 +31,19 @@ async function getTaskById (req, res) {
   }
 };
 
-module.exports = { getAllTasks, getTaskById }
+/**
+ * Create a new task
+ * @param {*} req express request
+ * @param {*} res express response
+ */
+async function createTask (req, res) {
+  const { name, details } = req.body;
+  try {
+    const newTask = await pool.query('INSERT INTO tasks (name, details) VALUES ($1, $2) RETURNING *', [name, details]);
+    res.json(newTask.rows[0]);
+  } catch (err) {
+    console.error(err.message);
+  }
+};
+
+module.exports = { getAllTasks, getTaskById, createTask }
