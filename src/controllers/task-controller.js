@@ -46,4 +46,20 @@ async function createTask (req, res) {
   }
 };
 
-module.exports = { getAllTasks, getTaskById, createTask }
+/**
+ * Update specified task by id
+ * @param {*} req express request
+ * @param {*} res express response
+ */
+ async function updateTaskById (req, res) {
+  const { id } = req.params;
+  const { name, details } = req.body;
+  try {
+    await pool.query('UPDATE tasks SET name = $1, details = $2 WHERE id = $3', [name, details, id]);
+    res.json('task updated successfully');
+  } catch (err) {
+    console.error(err.message);
+  }
+};
+
+module.exports = { getAllTasks, getTaskById, createTask, updateTaskById }
